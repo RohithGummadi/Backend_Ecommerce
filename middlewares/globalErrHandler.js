@@ -1,6 +1,6 @@
 export const globalErrHandler = (err, req, res, next)=>{
-    //build our error object
-    //stack about the error
+    //building my error object
+    //This stack has info about the error
     //message
     const stack = err?.stack;
     const statusCode = err?.status ? err?.statusCode: 500;
