@@ -78,6 +78,7 @@ export const getProductsCtrl = AsyncHandler(async(req,res)=>{
    
     //query
     let productQuery = Product.find()
+    //console.log(productQuery)
 
     //search by name ?name=hats   (additional payload sending)
     if (req.query.name){
@@ -98,6 +99,7 @@ export const getProductsCtrl = AsyncHandler(async(req,res)=>{
         productQuery = productQuery.find({
             category:{$regex: req.query.category, $options:'i'}
         });
+        //console.log(productQuery)
     }
 
     //filter by color
@@ -122,6 +124,7 @@ export const getProductsCtrl = AsyncHandler(async(req,res)=>{
         productQuery = productQuery.find({
             price:{$gte: priceRange[0], $lte:priceRange[1]},
         })
+
     }
 
     //pagination
@@ -161,7 +164,7 @@ export const getProductsCtrl = AsyncHandler(async(req,res)=>{
     }
 
     //await the query
-    const products = await productQuery;
+    const products = await productQuery.populate("reviews");
 
     res.json({
         status:"Success",
@@ -180,7 +183,7 @@ export const getProductsCtrl = AsyncHandler(async(req,res)=>{
 // access Public
 export const getProductCtrl = AsyncHandler(async(req,res)=>{
     console.log(req.params)
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate("reviews");
     if(!product){
         throw new Error("Product not found")
     }
