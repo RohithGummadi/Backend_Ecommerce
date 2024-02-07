@@ -30,7 +30,7 @@ export const createProductCtrl = AsyncHandler(async(req,res)=>{
     //find brand
 
     const brandFound = await Brand.findOne({
-        name: brand.toLowerCase(),
+        name: brand?.toLowerCase(),
     })
     if (!brandFound){
         throw new Error(
@@ -126,7 +126,6 @@ export const getProductsCtrl = AsyncHandler(async(req,res)=>{
         })
 
     }
-
     //pagination
     
     //page
@@ -174,7 +173,6 @@ export const getProductsCtrl = AsyncHandler(async(req,res)=>{
         message:"Products fetched succesfully",
         products
     })
-
 });
 
 
