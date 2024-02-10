@@ -7,7 +7,7 @@ const userRoutes = express.Router();
 userRoutes.post('/register', registerUserCtrl);
 userRoutes.post('/login', loginUserCtrl);
 userRoutes.get('/profile', isLoggedIn, getUserProfile);
-userRoutes.get('/update/shipping', isLoggedIn, updateShippingAddressctrl);
+userRoutes.put('/update/shipping', isLoggedIn, updateShippingAddressctrl);
 
 
 
