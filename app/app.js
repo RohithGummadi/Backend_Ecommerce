@@ -10,6 +10,7 @@ import colorRouter from '../routes/colorRouter.js';
 import reviewRouter from '../routes/reviewRouter.js';
 import orderRouter from '../routes/ordersRouter.js';
 import Stripe from 'stripe';
+import couponsRouter from '../routes/couponsRouter.js';
 
 dotenv.config();
 import Order from '../models/Order.js';
@@ -74,6 +75,7 @@ app.use("/api/v1/brands/", brandsRouter);
 app.use("/api/v1/colors/", colorRouter);
 app.use("/api/v1/reviews/", reviewRouter);
 app.use("/api/v1/orders/", orderRouter);
+app.use("/api/v1/coupons/", couponsRouter);
 
 //err middlewares
 app.use(notFound);

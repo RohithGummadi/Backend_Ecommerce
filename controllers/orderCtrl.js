@@ -6,6 +6,7 @@ import Order from "../models/Order.js";
 import User from "../models/User.js";
 import Product from "../models/Product.js"
 import { rmdirSync } from "fs";
+import Coupon from "../models/Coupon.js";
 
 //@desc create orders
 //@route POST /api/v1/orders
@@ -15,6 +16,26 @@ import { rmdirSync } from "fs";
 const stripe = new Stripe(process.env.STRIPE_KEY);
 
 export const createOrderCtrl = AsyncHandler(async(req,res)=>{
+
+    let discount;
+    let couponFound;
+
+    //get the coupon
+    const { coupon } = req?.query;
+    if (coupon) {
+        couponFound = await Coupon.findOne({
+            code: coupon?.toUpperCase()
+        });
+
+        if (couponFound?.isExpired) {
+            throw new Error("Coupon has expired");
+        }
+
+        if (!couponFound) {
+            throw new Error("Coupon not exists");
+        }
+        discount = couponFound?.discount / 100;
+    }
 
     //Get Payload
     const {orderItems, shippingAddress, totalPrice} = req.body;
@@ -35,8 +56,9 @@ export const createOrderCtrl = AsyncHandler(async(req,res)=>{
         user: user?._id,
         orderItems,
         shippingAddress,
-        totalPrice,
+        totalPrice: couponFound ? totalPrice - totalPrice*discount : totalPrice
     })
+     console.log(order);
     // Update the product quantity
     const productIds = orderItems.map(order => order._id);
     const products = await Product.find({ _id: { $in: productIds } });
