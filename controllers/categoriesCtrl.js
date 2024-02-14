@@ -7,6 +7,8 @@ import asyncHandler from "express-async-handler"
 //@access Private/Admin
 export const createCategoryCtrl = asyncHandler(async(req,res)=>{
     const {name} = req.body;
+    const convertedImgs = req.files.map((file)=>file.path)
+
     const categoryFound = await Category.findOne({ name: name.toLowerCase() });
 
     if(categoryFound){
@@ -16,6 +18,7 @@ export const createCategoryCtrl = asyncHandler(async(req,res)=>{
     const category = await Category.create({
         name: name.toLowerCase(),
         user:req.userAuthId,
+        images: convertedImgs
     });
 
     res.json({
