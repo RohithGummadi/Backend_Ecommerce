@@ -83,8 +83,6 @@ export const updateCouponCtrl = AsyncHandler(async(req,res)=>{
 
 });
 
-
-
 export const deleteCouponCtrl = AsyncHandler(async(req,res)=>{
     const coupon = await Coupon.findByIdAndDelete(req.params.id);
     res.status(201).json({

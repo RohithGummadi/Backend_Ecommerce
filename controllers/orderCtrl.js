@@ -159,3 +159,75 @@ export const updateOrderCtrl = AsyncHandler(async(req,res)=>{
     })
 });
 
+//@desc get sales sum of orders
+//@route GET /api/v1/orders/sales/sum
+//@route private/admin
+
+export const getOrderStatsCtrl = AsyncHandler(async(req,res)=>{
+    //sum of sales
+    const TotalSalesSum = await Order.aggregate([
+        {
+            $group:{
+                _id: null,
+                totalSales:{
+                    $sum: "$totalPrice",  //this basically calculates the sum from all objects from 
+                }
+            },
+
+        }
+    ]);
+
+    //get minimum order
+    const orders = await Order.aggregate([
+        {
+            $group:{
+                _id:null,
+                minimumSale:{
+                    $min:"$totalPrice",
+                },
+
+                totalSales:{
+                    $sum: "$totalPrice",  //this basically calculates the sum from all objects from 
+                },
+
+                maximumSale:{
+                    $max:"$totalPrice",
+                },
+
+                averageSale:{
+                    $avg:"$totalPrice",
+                },
+                
+            },
+        },
+    ]);
+
+    //get the date
+    const date = new Date();
+    const today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const saleToday = await Order.aggregate([
+        {
+            $match:{
+                createdAt:{
+                    $gte: "today",
+                },
+            },
+        },
+        {
+            $group:{
+                _id:null,
+                totalSales:{
+                    $sum:"totalPrice"
+                },
+            },
+
+        },
+    ]);
+
+    res.status(200).json({
+        success: true,
+        message: "Sum of orders",
+        orders,
+        saleToday  
+    }) 
+});
