@@ -11,6 +11,7 @@ import reviewRouter from '../routes/reviewRouter.js';
 import orderRouter from '../routes/ordersRouter.js';
 import Stripe from 'stripe';
 import couponsRouter from '../routes/couponsRouter.js';
+import path from 'path';
 
 dotenv.config();
 import Order from '../models/Order.js';
@@ -65,7 +66,19 @@ if (event.type === "checkout.session.completed"){
   response.send();
 });
 
+//pass incoming data
 app.use(express.json());
+
+//url encoded
+app.use(express.urlencoded({extended:true}));
+
+//server static files
+app.use(express.static('public'))
+
+//Home route
+app.get("/", (req,res)=>{
+  res.sendFile(path.join('public', 'index.html'))
+})
 
 //routes
 app.use("/api/v1/users/", userRoutes);
@@ -80,7 +93,5 @@ app.use("/api/v1/coupons/", couponsRouter);
 //err middlewares
 app.use(notFound);
 app.use(globalErrHandler);
-
-
 
 export default app;

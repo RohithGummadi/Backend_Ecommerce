@@ -131,7 +131,7 @@ export const getProductsCtrl = AsyncHandler(async(req,res)=>{
         })
 
     }
-    //pagination
+    //pagination 
     
     //page
     const page = parseInt(req.query.page) ? parseInt(req.query.page) : 1;
@@ -152,6 +152,7 @@ export const getProductsCtrl = AsyncHandler(async(req,res)=>{
     productQuery = productQuery.skip(startIndex).limit(limit);
 
     const pagination ={};
+    //Here we are adding the pagination 
 
     if(endIndex<total){
         pagination.next ={

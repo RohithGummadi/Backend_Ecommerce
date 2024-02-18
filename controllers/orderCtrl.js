@@ -193,7 +193,7 @@ export const getOrderStatsCtrl = AsyncHandler(async(req,res)=>{
                 maximumSale:{
                     $max:"$totalPrice",
                 },
-
+                
                 averageSale:{
                     $avg:"$totalPrice",
                 },
